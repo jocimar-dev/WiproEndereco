@@ -1,16 +1,11 @@
 package com.wipro.endereco.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Endereco {
-
+public class ConsultaEnderecoResponse {
     private String cep;
     private String rua;
     private String complemento;
@@ -19,4 +14,5 @@ public class Endereco {
     private String estado;
 
     private double frete;
+
 }
