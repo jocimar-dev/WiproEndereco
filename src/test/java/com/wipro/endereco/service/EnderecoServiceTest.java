@@ -27,6 +27,7 @@ class EnderecoServiceTest {
     @DisplayName("Deve buscar endereço válido")
     void deveBuscarEndereco() {
         var viaCepResponse = new ViaCepResponse();
+
         viaCepResponse.setCep("01001-000");
         viaCepResponse.setLogradouro("Praça da Sé");
         viaCepResponse.setComplemento("lado ímpar");

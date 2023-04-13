@@ -20,12 +20,11 @@ public class EnderecoService {
         var url = String.format(VIACEP_JSON, cep.replaceAll("\\D", ""));
         var viaCepResponse = restTemplate.getForObject(url, ViaCepResponse.class);
 
-        return (viaCepResponse != null && viaCepResponse.getCep() != null) ?
-                converteViacepParaResponse(viaCepResponse) : null;
-    }
+        if (viaCepResponse == null || viaCepResponse.getCep() == null) {
+            return null;
+        }
 
-    private ConsultaEnderecoResponse converteViacepParaResponse(ViaCepResponse viaCepResponse) {
-    var response = new ConsultaEnderecoResponse();
+        var response = new ConsultaEnderecoResponse();
         response.setCep(viaCepResponse.getCep());
         response.setRua(viaCepResponse.getLogradouro());
         response.setComplemento(viaCepResponse.getComplemento());

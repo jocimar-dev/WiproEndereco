@@ -2,18 +2,23 @@ package com.wipro.endereco.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wipro.endereco.model.CepRequest;
-import com.wipro.endereco.model.ConsultaEnderecoResponse;
 import com.wipro.endereco.service.EnderecoService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
+import static com.wipro.endereco.MockFactory.payloadoRequestMock;
+import static com.wipro.endereco.MockFactory.payloadoResponseMock;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,35 +26,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(EnderecoController.class)
+@SpringBootTest
+@ActiveProfiles("test")
 class EnderecoControllerTest {
 
+    @Autowired(required = false)
+    private  MockMvc mockMvc;
     @Autowired
-    private MockMvc mockMvc;
-
+    private WebApplicationContext context;
     @Autowired
     private ObjectMapper objectMapper;
-
     @MockBean
     private EnderecoService service;
 
-    private ConsultaEnderecoResponse enderecoResponse;
-
     @BeforeEach
     void setUp() {
-        enderecoResponse = new ConsultaEnderecoResponse();
-        enderecoResponse.setCep("12345678");
-        enderecoResponse.setRua("Rua Teste");
-        enderecoResponse.setComplemento("Complemento Teste");
-        enderecoResponse.setBairro("Bairro Teste");
-        enderecoResponse.setCidade("Cidade Teste");
-        enderecoResponse.setEstado("SP");
-        enderecoResponse.setFrete(7.85);
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        payloadoRequestMock();
     }
 
     @Test
-    void consultarEndereco_ValidCep() throws Exception {
-        when(service.buscarEndereco(any())).thenReturn(enderecoResponse);
+    @DisplayName("Deve retornar 200 quando o CEP for encontrado")
+    void deveRetornar200QuandoCepEncontrado() throws Exception {
+        when(service.buscarEndereco(any())).thenReturn(payloadoResponseMock());
 
         mockMvc.perform(post("/v1/consulta-endereco")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -64,8 +63,10 @@ class EnderecoControllerTest {
                 .andExpect(jsonPath("$.frete").value(7.85));
     }
 
+
     @Test
-    void consultarEndereco_NotFound() throws Exception {
+    @DisplayName("Deve retornar 404 quando o CEP não for encontrado")
+    void retornaNotFound() throws Exception {
         when(service.buscarEndereco(any())).thenReturn(null);
 
         mockMvc.perform(post("/v1/consulta-endereco")

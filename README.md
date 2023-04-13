@@ -73,6 +73,7 @@ mvn test
 - Spring Boot
 - Spring Web
 - Lombok
+- Swagger
 - JUnit 5
 - Mockito
 
