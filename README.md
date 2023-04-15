@@ -5,8 +5,9 @@ Este projeto foi desenvolvido como parte do processo seletivo para a Wipro e ofe
 
 ## Requisitos
 
-- Java 11 ou superior
-- Maven 3.6.0 ou superior
+- Java 17
+- Plugin Lombok instalado no IDE
+- Maven 3.8.1
 
 ## Como executar o projeto
 
