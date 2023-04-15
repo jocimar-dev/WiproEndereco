@@ -1,5 +1,6 @@
 package com.wipro.endereco.service;
 
+import com.wipro.endereco.service.exception.CepInvalidoException;
 import com.wipro.endereco.model.ConsultaEnderecoResponse;
 import com.wipro.endereco.model.ViaCepResponse;
 import lombok.AllArgsConstructor;
@@ -17,10 +18,15 @@ public class EnderecoService {
     private static final String VIACEP_JSON = "https://viacep.com.br/ws/%s/json/";
 
     public ConsultaEnderecoResponse buscarEndereco(String cep) {
+        if (cepInvalido(cep)) {
+            throw new CepInvalidoException("CEP inválido: " + cep);
+        }
         var url = String.format(VIACEP_JSON, cep.replaceAll("\\D", ""));
         var viaCepResponse = restTemplate.getForObject(url, ViaCepResponse.class);
 
-        if (viaCepResponse == null || viaCepResponse.getCep() == null) {
+        if (viaCepResponse == null ||
+                viaCepResponse.getCep() == null
+        ) {
             return null;
         }
 
@@ -34,6 +40,11 @@ public class EnderecoService {
         response.setFrete(calcularFrete(viaCepResponse.getUf()));
 
         return response;
+    }
+
+    private boolean cepInvalido(String cep) {
+        String cepSemFormatacao = cep.replaceAll("\\D", "");
+        return cepSemFormatacao.length() != 8;
     }
 }
 

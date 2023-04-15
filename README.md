@@ -50,6 +50,14 @@ curl -X POST \
   -d '{ "cep": "12345678" }'
 ```
 
+**Acessando a documentação da API**
+
+Foi utilizado o Swagger para documentar e testar nossa API, oferecendo uma interface interativa e visual para facilitar o entendimento e uso dos endpoints.
+1. Inicie a aplicação.
+2. Acesse http://localhost:8080/swagger-ui/index.html no navegador.
+3. A interface do Swagger exibe os endpoints disponíveis, permitindo testes diretamente na plataforma e garantindo clareza e colaboração entre os desenvolvedores.
+
+
 **Resposta:**
 
 ```json
@@ -63,6 +71,9 @@ curl -X POST \
   "frete": 7.85
 }
 ```
+
+## Testes automatizados com Cucumber
+Implementado o Cucumber para realizar testes automatizados de comportamento (BDD) em nossa aplicação, facilitando a descrição e entendimento dos cenários de teste.
 
 ## Testes unitários
 ```bash

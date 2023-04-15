@@ -6,12 +6,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import jakarta.inject.Singleton;
+import org.springframework.util.Assert;
 
-
-@Singleton
 public class EnderecoSteps {
 
     private String cepValido;
@@ -34,8 +30,9 @@ public class EnderecoSteps {
 
     @Then("o endereço é retornado com sucesso")
     public void enderecoRetornadoComSucesso() {
-        assertNotNull(enderecoResponse, "Endereço não encontrado");
-        assertEquals(cepValido, enderecoResponse.getCep(), "O CEP retornado não corresponde ao esperado");
+        Assert.notNull(enderecoResponse, "Endereço não encontrado");
+        Assert.isTrue(cepValido.equals(enderecoResponse.getCep()), "O CEP retornado não corresponde ao esperado");
     }
+
 }
 
